@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Player : MonoBehaviour {
+
+    private bool jumped;
+
+	// Use this for initialization
+	void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        float horizontalMovement = Input.GetAxis("Horizontal");
+        float verticalMovement = Input.GetAxis("Vertical");
+
+        if (!jumped)
+        {
+            // frog did not move.
+            if (horizontalMovement != 0 && verticalMovement != 0)
+            {
+                jumped = true;
+            }
+        }
+        else
+        {
+            //frog moved.
+            if (horizontalMovement == 0 && verticalMovement == 0)
+            {
+                jumped = false;
+            }
+        }
+	}
+}
