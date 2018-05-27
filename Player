@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+
+    public float jumpDistance = 0.32f;
     private bool jumped;
 
 	// Use this for initialization
@@ -19,8 +21,18 @@ public class Player : MonoBehaviour {
         if (!jumped)
         {
             // frog did not move.
-            if (horizontalMovement != 0 && verticalMovement != 0)
+            if (horizontalMovement != 0) 
             {
+                transform.position = new Vector2 (
+                    transform.position.x + (horizontalMovement > 0 ? jumpDistance : -jumpDistance),
+                    transform.position.y);
+                jumped = true;
+            }
+            else if (verticalMovement != 0)
+            {
+                transform.position = new Vector2(
+                    transform.position.x,
+                    transform.position.y + (verticalMovement > 0 ? jumpDistance : -jumpDistance));
                 jumped = true;
             }
         }
