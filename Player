@@ -5,6 +5,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
+    public delegate void PlayerHandler();
+    public event PlayerHandler OnPlayerMoved;
+    public event PlayerHandler OnPlayerEscaped;
+
     public float jumpDistance = 0.32f;
 
     private bool jumped;
@@ -48,10 +52,15 @@ public class Player : MonoBehaviour
             }
 
             Collider2D hitCollider = Physics2D.OverlapCircle(targetPosition, 0.1f);
-            if (tryingToMove == true && (hitCollider == null))
+            if (tryingToMove == true && (hitCollider == null || hitCollider.GetComponent<Enemy>() != null))
             {
                 transform.position = targetPosition;
                 jumped = true;
+                GetComponent<AudioSource>().Play();
+                if (OnPlayerMoved != null)
+                {
+                    OnPlayerMoved();
+                }
                 
             }
         }
@@ -84,9 +93,21 @@ public class Player : MonoBehaviour
         if (transform.position.y > (Screen.height / 100f) / 2f)
         {
             transform.position = startingPosition;
+            if (OnPlayerEscaped != null)
+            {
+                OnPlayerEscaped();
+            }
 
         }
     }
 
-   
+
+    //Enemy trigger logic
+   void OnTriggerEnter2D (Collider2D otherCollider)
+    {
+        if (otherCollider.GetComponent<Enemy>() != null)
+        {
+            Destroy(gameObject);
+        }
+    }
 }
